@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffd7e8"><title>Rương báu — VIP Dating</title><link rel="stylesheet" href="style.css">
+</head>
+<body class="game-page treasure-page">
+  <main class="treasure-shell">
+    <div class="top-tag">🎉 NHIỆM VỤ HOÀN THÀNH 🎉</div>
+    <h1 class="page-title">Phần thưởng của bạn!</h1>
+    <p class="page-subtitle">Nhìn trước những món quà xinh xắn rồi chúng sẽ được giấu vào rương nha.</p>
+    <div id="prize-preview" class="prize-preview">
+      <article class="prize-card"><div class="prize-art">🥔🥤</div><strong>Chipchip vị cocacola</strong></article>
+      <article class="prize-card"><div class="prize-art">🧋💖</div><strong>Trà sữa full topping</strong></article>
+      <article class="prize-card"><div class="prize-art">🎁✨</div><strong>Phần quà tùy chọn</strong></article>
+    </div>
+    <div id="chest-instruction" class="glass-card chest-instruction">✨ Quà đã được cất vào rương! Ba chiếc rương sẽ đổi chỗ một chút… Hãy chọn bằng trực giác nhé.</div>
+    <div id="chest-row" class="chest-row" aria-label="Chọn một rương báu">
+      <button class="chest" data-chest="0" aria-label="Chọn rương số 1"><span class="chest-sparkle">✦</span><span class="chest-icon">🧰</span><small>RƯƠNG A</small></button>
+      <button class="chest" data-chest="1" aria-label="Chọn rương số 2"><span class="chest-sparkle">✦</span><span class="chest-icon">🧰</span><small>RƯƠNG B</small></button>
+      <button class="chest" data-chest="2" aria-label="Chọn rương số 3"><span class="chest-sparkle">✦</span><span class="chest-icon">🧰</span><small>RƯƠNG C</small></button>
+    </div>
+    <section id="prize-result" class="glass-card prize-result hidden" aria-live="polite"></section>
+    <form id="custom-prize-form" class="glass-card custom-prize-form hidden">
+      <label for="custom-prize">Bạn muốn nhận món quà gì nè?</label>
+      <textarea id="custom-prize" rows="3" placeholder="Ví dụ: đi xem phim, đi ăn món ngon..." required></textarea>
+      <button class="btn btn-primary btn-wide" type="submit">Chốt kèo 💗</button>
+    </form>
+    <a id="continue-final" class="btn btn-primary btn-wide hidden" href="final.html">Mở lời nhắn cuối cùng 💌</a>
+  </main>
+  <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
+  <script src="app.js"></script><script src="treasure.js"></script>
+</body>
+</html>

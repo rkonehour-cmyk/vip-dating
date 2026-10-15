@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffd7e8"><title>Đánh boss — VIP Dating</title><link rel="stylesheet" href="style.css">
+</head>
+<body class="game-page boss-page">
+  <main class="boss-shell">
+    <header class="level-header"><a class="mini-brand" href="quiz.html">🐾 VIP Dating</a><span>FINAL BOSS</span></header>
+    <section class="glass-card boss-intro">
+      <p class="kicker">⚔️ TRẬN CHIẾN CUỐI CÙNG</p>
+      <h1>Hạ gục Boss Mèo Lì!</h1>
+      <p>Chạm vào nút <strong>BẮN TIM</strong> để bắn tim về phía boss. Trên máy tính có thể nhấn phím <strong>Space</strong> nữa nhé!</p>
+    </section>
+    <section class="arena" id="arena">
+      <div class="boss-hud"><span>HP BOSS</span><div class="hp-track"><div id="boss-hp" class="hp-fill"></div></div><strong id="hp-label">100%</strong></div>
+      <div id="boss" class="boss-character" role="img" aria-label="Boss mèo hoạt hình">😼</div>
+      <div id="boss-speech" class="boss-speech">Mơ đi cưng! 😹</div>
+      <div id="projectiles" class="projectiles" aria-hidden="true"></div>
+      <div id="player" class="player-character" aria-hidden="true">😻</div>
+      <div class="arena-ground"></div>
+    </section>
+    <div class="boss-controls">
+      <button id="shoot-button" class="btn btn-primary btn-wide">💘 BẮN TIM!</button>
+      <p id="boss-status" class="feedback" aria-live="polite">Boss đang khinh thường bạn đó. Tấn công thôi!</p>
+    </div>
+  </main>
+  <script src="app.js"></script><script src="boss.js"></script>
+</body>
+</html>
