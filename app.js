@@ -54,6 +54,7 @@ const gameSession =
   'game-' + Date.now() + '-' +
   Math.random().toString(36).slice(2, 8);
 
+
 function sendGameEvent(event, details = {}) {
   const payload = {
     session: gameSession,
@@ -63,15 +64,22 @@ function sendGameEvent(event, details = {}) {
     sentAt: new Date().toISOString()
   };
 
+  console.log('Đang gửi sự kiện:', payload);
+
+  const body = new URLSearchParams({
+    payload: JSON.stringify(payload)
+  });
+
   fetch(TRACKER_URL, {
     method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8'
-    },
-    body: JSON.stringify(payload)
-  }).catch(err => {
-    console.error('Không gửi được sự kiện:', err);
+    body
+  })
+  .then(() => {
+    console.log('Đã gửi yêu cầu tới tracker.');
+  })
+  .catch(err => {
+    console.error('Lỗi gửi tracker:', err);
   });
 }
+
 
