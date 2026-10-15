@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbwc7ic1Ar7uFRfQxOVvJNOHup-HbItaEnX4H8q5J4ITUSTXpu-W08d_ru53t_txZPpuLQ/exec';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzNeIj_Yrw5bWN2pcz1UM7Zu5ndK0-Gb-5u-AkASxhIF12SEdie_EmsFjyQUvac9WPENw/exec';
 
 const gameSession =
   'game-' + Date.now() + '-' +
