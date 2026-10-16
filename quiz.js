@@ -24,6 +24,24 @@ function renderQuestion(){
 function chooseAnswer(index,button){
  if(answered)return;answered=true;
  const q=questions[current],buttons=[...$('answer-list').querySelectorAll('button')];
+ // Lưu đáp án người chơi đã chọn.
+const answerRecord = {
+  questionNumber: current + 1,
+  question: q.text,
+  selectedAnswer: q.answers[index],
+  correctAnswer: q.answers[q.correctIndex],
+  correct: index === q.correctIndex
+};
+
+const savedAnswers = readGameData('vipDatingAnswers', []);
+savedAnswers[current] = answerRecord;
+
+sessionStorage.setItem(
+  'vipDatingAnswers',
+  JSON.stringify(savedAnswers)
+);
+
+sendGameEvent('quiz_answer', answerRecord);
  buttons.forEach(b=>b.disabled=true);
  
   sendGameEvent('quiz_answer', {
