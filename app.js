@@ -48,12 +48,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzNeIj_Yrw5bWN2pcz1UM7Zu5ndK0-Gb-5u-AkASxhIF12SEdie_EmsFjyQUvac9WPENw/exec';
+const TRACKER_URL = 'https://script.google.com/macros/library/d/1bTNG8skmK31fLF0I-Qv9qiywxVZfnpRgKzU39U46ejZAkBtZhoicd61m/3';
 
-const gameSession =
-  'game-' + Date.now() + '-' +
-  Math.random().toString(36).slice(2, 8);
+let gameSession = sessionStorage.getItem('gameSession');
 
+if (!gameSession) {
+  gameSession =
+    'game-' + Date.now() + '-' +
+    Math.random().toString(36).slice(2, 8);
+
+  sessionStorage.setItem('gameSession', gameSession);
+}
 
 function sendGameEvent(event, details = {}) {
   const payload = {
@@ -64,22 +69,15 @@ function sendGameEvent(event, details = {}) {
     sentAt: new Date().toISOString()
   };
 
-  console.log('Đang gửi sự kiện:', payload);
-
-  const body = new URLSearchParams({
-    payload: JSON.stringify(payload)
-  });
-
   fetch(TRACKER_URL, {
     method: 'POST',
-    body
-  })
-  .then(() => {
-    console.log('Đã gửi yêu cầu tới tracker.');
-  })
-  .catch(err => {
-    console.error('Lỗi gửi tracker:', err);
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(payload)
+  }).catch(err => {
+    console.error('Không gửi được sự kiện:', err);
   });
 }
-
 
