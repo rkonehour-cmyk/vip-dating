@@ -20,6 +20,13 @@ setTimeout(()=>{
 row.querySelectorAll('.chest').forEach((chest,index)=>chest.addEventListener('click',()=>{
  if(locked)return;locked=true;
  const prize=prizes[mapping[index]];
+ // Lưu phần quà người chơi chọn.
+sessionStorage.setItem('vipDatingPrize', prize.name);
+
+sendGameEvent('prize_selected', {
+  prize: prize.name,
+  description: prize.description
+});
  sendGameEvent('treasure_selected', {
   prize: prize.name,
   chest: index + 1
@@ -38,6 +45,11 @@ row.querySelectorAll('.chest').forEach((chest,index)=>chest.addEventListener('cl
 }));
 document.getElementById('custom-prize-form').addEventListener('submit',e=>{
  e.preventDefault();const value=document.getElementById('custom-prize').value.trim();if(!value)return;
+ sessionStorage.setItem('vipDatingCustomPrize', value);
+
+sendGameEvent('custom_prize_entered', {
+  prize: value
+});
  const result=document.getElementById('prize-result');
  const chosen=document.createElement('p');chosen.innerHTML='💌 <strong>Yêu cầu đặc biệt:</strong> ';chosen.append(document.createTextNode(value));result.appendChild(chosen);
  document.getElementById('custom-prize-form').classList.add('hidden');document.getElementById('continue-final').classList.remove('hidden');playTone('good');
