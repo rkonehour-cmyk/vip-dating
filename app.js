@@ -48,36 +48,101 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-const TRACKER_URL = 'https://script.google.com/macros/library/d/1bTNG8skmK31fLF0I-Qv9qiywxVZfnpRgKzU39U46ejZAkBtZhoicd61m/3';
+// ===== EMAILJS CONFIG =====
+const EMAILJS_PUBLIC_KEY = 'DPVHMbrLyE0wiwkY1';
+const EMAILJS_SERVICE_ID = 'service_emjlkdl';
+const EMAILJS_TEMPLATE_ID = 'template_rj5w8rr';
 
-let gameSession = sessionStorage.getItem('gameSession');
+// Dùng chung một mã lượt chơi qua các trang.
+const GAME_SESSION_KEY = 'vipDatingSessionId';
+const GAME_EVENTS_KEY = 'vipDatingEvents';
+const GAME_ANSWERS_KEY = 'vipDatingAnswers';
+const GAME_PRIZE_KEY = 'vipDatingPrize';
+const GAME_CUSTOM_PRIZE_KEY = 'vipDatingCustomPrize';
+const GAME_SENT_KEY = 'vipDatingEmailSent';
 
-if (!gameSession) {
-  gameSession =
-    'game-' + Date.now() + '-' +
-    Math.random().toString(36).slice(2, 8);
+function getOrCreateGameSession() {
+  let id = sessionStorage.getItem(GAME_SESSION_KEY);
 
-  sessionStorage.setItem('gameSession', gameSession);
+  if (!id) {
+    id = 'game-' + Date.now() + '-' +
+      Math.random().toString(36).slice(2, 8);
+    sessionStorage.setItem(GAME_SESSION_KEY, id);
+  }
+
+  return id;
+}
+
+function readGameData(key, fallback) {
+  try {
+    const value = JSON.parse(sessionStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 function sendGameEvent(event, details = {}) {
-  const payload = {
-    session: gameSession,
+  const events = readGameData(GAME_EVENTS_KEY, []);
+
+  events.push({
     event,
     details,
     page: location.pathname,
-    sentAt: new Date().toISOString()
+    time: new Date().toISOString()
+  });
+
+  // Giới hạn số sự kiện lưu trong trình duyệt.
+  sessionStorage.setItem(
+    GAME_EVENTS_KEY,
+    JSON.stringify(events.slice(-100))
+  );
+}
+
+// Gửi một email tổng hợp khi hoàn thành game.
+async function sendGameCompletionEmail() {
+  if (sessionStorage.getItem(GAME_SENT_KEY) === 'yes') {
+    return;
+  }
+
+  if (!window.emailjs) {
+    throw new Error('EmailJS chưa được tải. Kiểm tra thẻ script trong HTML.');
+  }
+
+  const answers = readGameData(GAME_ANSWERS_KEY, []);
+  const prize = sessionStorage.getItem(GAME_PRIZE_KEY) || 'Chưa ghi nhận';
+  const customPrize =
+    sessionStorage.getItem(GAME_CUSTOM_PRIZE_KEY) || 'Không có';
+
+  const events = readGameData(GAME_EVENTS_KEY, []);
+
+  const templateParams = {
+    session_id: getOrCreateGameSession(),
+    completed_at: new Date().toLocaleString('vi-VN'),
+    quiz_answers: answers.length
+      ? answers.map((a) =>
+          `Câu ${a.questionNumber}: ${a.question}\n` +
+          `Đã chọn: ${a.selectedAnswer}\n` +
+          `Đáp án đúng: ${a.correctAnswer}\n` +
+          `Kết quả: ${a.correct ? 'Đúng' : 'Sai'}`
+        ).join('\n\n')
+      : 'Không có dữ liệu câu trả lời',
+    prize,
+    custom_prize: customPrize,
+    game_history: events.map((e) =>
+      `[${e.time}] ${e.page} — ${e.event}: ` +
+      JSON.stringify(e.details)
+    ).join('\n')
   };
 
-  fetch(TRACKER_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8'
-    },
-    body: JSON.stringify(payload)
-  }).catch(err => {
-    console.error('Không gửi được sự kiện:', err);
-  });
+  await emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    templateParams,
+    { publicKey: EMAILJS_PUBLIC_KEY }
+  );
+
+  // Chỉ đánh dấu đã gửi sau khi EmailJS báo thành công.
+  sessionStorage.setItem(GAME_SENT_KEY, 'yes');
 }
 
